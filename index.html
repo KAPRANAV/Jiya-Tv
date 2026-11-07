@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0e0d15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Jiya TV • Watch Exclusive Premiere</title>
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="theme-dark aura-sakura" id="page-body">
+  <!-- Dynamic Backdrop Ambient Glow Canvas / YouTube Ambient Lighting FX -->
+  <div class="ambient-glow" id="ambient-glow" aria-hidden="true"></div>
+
+  <!-- Cinema Dimmer Overlay (Lights Off Mode) -->
+  <div class="cinema-overlay" id="cinema-overlay" title="Click anywhere to exit cinema mode">
+    <div class="cinema-exit-hint">
+      <i data-lucide="eye"></i> Click anywhere to exit Cinema Mode
+    </div>
+  </div>
+
+  <!-- App Header / Navigation Bar -->
+  <header class="app-header">
+    <div class="header-container">
+      <!-- Left: Brand Logo (Jiya TV) -->
+      <div class="brand-group">
+        <a href="#" class="brand-logo" id="brand-logo-btn" title="Jiya TV • Home">
+          <div class="brand-icon-wrapper">
+            <span class="brand-sparkle"></span>
+            <i data-lucide="play" class="brand-play-icon"></i>
+          </div>
+          <div class="brand-text-column">
+            <span class="brand-title">Jiya<span class="brand-highlight"> TV</span></span>
+            <span class="brand-badge">Premium Cinema</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Center: Aesthetic Search Bar -->
+      <div class="header-search">
+        <div class="search-box">
+          <i data-lucide="search" class="search-icon"></i>
+          <input type="text" placeholder="Search on Jiya TV..." id="search-input" autocomplete="off">
+          <button class="search-clear-btn" id="search-clear" aria-label="Clear search">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <button class="voice-search-btn" title="Voice Search" id="voice-search-btn">
+          <i data-lucide="mic"></i>
+        </button>
+      </div>
+
+      <!-- Right: Action Buttons & Controls -->
+      <div class="header-actions">
+        <!-- Aura Mood Selector Dropdown -->
+        <div class="aura-dropdown-wrap">
+          <button class="pill-btn aura-btn" id="aura-menu-btn" title="Change ambient glow mood">
+            <span class="aura-dot"></span>
+            <span class="btn-text">Aura Mood</span>
+            <i data-lucide="sparkles" class="btn-icon-right"></i>
+          </button>
+          <div class="aura-picker-menu" id="aura-picker-menu">
+            <div class="aura-picker-header">
+              <span>Ambient Aura Light</span>
+              <span class="badge-mini">YouTube FX</span>
+            </div>
+            <div class="aura-options-grid">
+              <button class="aura-option active" data-aura="aura-sakura">
+                <span class="color-preview sakura"></span>
+                <span>Sakura Dream 🌸</span>
+              </button>
+              <button class="aura-option" data-aura="aura-lavender">
+                <span class="color-preview lavender"></span>
+                <span>Lavender Haze 💜</span>
+              </button>
+              <button class="aura-option" data-aura="aura-peach">
+                <span class="color-preview peach"></span>
+                <span>Peach Sunset 🍑</span>
+              </button>
+              <button class="aura-option" data-aura="aura-cyber">
+                <span class="color-preview cyber"></span>
+                <span>Cyber Berry 💖</span>
+              </button>
+              <button class="aura-option" data-aura="aura-aurora">
+                <span class="color-preview aurora"></span>
+                <span>Midnight Glow 🌌</span>
+              </button>
+              <button class="aura-option" data-aura="aura-none">
+                <span class="color-preview none"></span>
+                <span>Aura Off</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cinema Mode Button (Lights Off) -->
+        <button class="icon-btn" id="cinema-toggle-btn" title="Cinema Mode (Dim Lights • C)">
+          <i data-lucide="lamp"></i>
+        </button>
+
+        <!-- Theme Toggle (Dark Velvet / Strawberry Milk Pastel) -->
+        <button class="icon-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+          <i data-lucide="moon" id="theme-icon"></i>
+        </button>
+
+        <!-- Publisher / User Profile Avatar -->
+        <div class="user-profile" id="user-profile-btn" title="Publisher: Pranav">
+          <div class="avatar-ring">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+              alt="Pranav" class="avatar-img">
+          </div>
+          <span class="status-indicator"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Watch Stage (Centered, Single Dedicated Movie View) -->
+  <main class="watch-container">
+    <div class="watch-stage">
+
+      <!-- Video Player Wrapper with Ambient Glow & Floating Mini-player support -->
+      <div class="player-outer-wrapper" id="player-outer">
+        <!-- Backlight Glow for the Player -->
+        <div class="player-glow-canvas" id="player-glow"></div>
+
+        <!-- Video Player Box (16:9 Aspect Ratio) -->
+        <div class="player-box" id="main-player-box">
+          <!-- Top Floating Quick Controls Ribbon -->
+          <div class="player-top-overlay">
+            <span class="stream-badge"><span class="live-dot"></span> HD 1080p Ultra</span>
+            <div class="player-overlay-actions">
+              <button class="glass-pill-btn" id="theater-mode-btn" title="Theater Mode (T)">
+                <i data-lucide="maximize-2"></i>
+                <span>Theater</span>
+              </button>
+              <button class="glass-pill-btn" id="fullscreen-btn" title="Fullscreen (F)">
+                <i data-lucide="expand"></i>
+                <span>Fullscreen</span>
+              </button>
+              <button class="glass-pill-btn" id="sleep-timer-btn" title="Sleep Timer">
+                <i data-lucide="clock"></i>
+                <span id="sleep-timer-label">Timer</span>
+              </button>
+              <button class="glass-pill-btn" id="reload-player-btn" title="Refresh Stream">
+                <i data-lucide="rotate-cw"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- The Provided Iframe Embedded Exactly As Requested -->
+          <div class="iframe-container" id="iframe-wrap">
+            <iframe src="https://playdrive.vip/e/AQGrE48AAgDqcw" id="movie-iframe" width="560" height="315"
+              allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture; clipboard-write"
+              referrerpolicy="origin-when-cross-origin" loading="lazy">
+            </iframe>
+          </div>
+
+          <!-- Mini Player Sticky Close & Restore Bar (visible when scrolled) -->
+          <div class="mini-player-bar" id="mini-player-bar">
+            <span class="mini-title">Playing on Jiya TV • Published by Pranav</span>
+            <div class="mini-actions">
+              <button class="mini-btn" id="restore-player-btn" title="Back to video">
+                <i data-lucide="arrow-up-right"></i>
+              </button>
+              <button class="mini-btn" id="close-mini-btn" title="Close mini player">
+                <i data-lucide="x"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Metadata Area (Title, Actions, Publisher info) -->
+      <div class="video-info-section">
+        <!-- Video Hashtags -->
+        <div class="video-tags">
+          <span class="tag">#JiyaTV</span>
+          <span class="tag">#PublishedByPranav</span>
+          <span class="tag">#PremiereHD</span>
+          <span class="tag">#CinematicMasterpiece</span>
+          <span class="tag">#Trending</span>
+        </div>
+
+        <!-- Video Main Title -->
+        <h1 class="video-title">
+          Midnight Reverie: The Chronicles of Velvet & Starlight (Official Premiere)
+        </h1>
+
+        <!-- Publisher & YouTube Action Buttons Bar -->
+        <div class="video-bar-wrap">
+          <!-- Publisher Card: Pranav -->
+          <div class="publisher-card">
+            <div class="publisher-avatar-wrap">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"
+                alt="Pranav" class="publisher-avatar">
+              <span class="verified-badge" title="Verified Publisher">
+                <i data-lucide="check"></i>
+              </span>
+            </div>
+            <div class="publisher-meta">
+              <div class="publisher-name-row">
+                <h3 class="publisher-name">Pranav</h3>
+                <span class="publisher-role-tag">Publisher</span>
+              </div>
+              <p class="publisher-subs">2.48M subscribers • Jiya TV Official</p>
+            </div>
+            <button class="subscribe-btn" id="subscribe-btn" title="Subscribe to Pranav">
+              <i data-lucide="bell" class="sub-bell-icon"></i>
+              <span class="sub-text">Subscribe</span>
+              <span class="sparkle-bubble"></span>
+            </button>
+          </div>
+
+          <!-- YouTube Action Buttons (Like, Dislike, Share, Save, Offline, Ambient) -->
+          <div class="action-buttons-group">
+            <!-- Like / Dislike Combined Pill -->
+            <div class="segmented-pill like-dislike-pill">
+              <button class="action-btn like-btn" id="like-btn" title="I love this video">
+                <i data-lucide="heart" class="heart-icon"></i>
+                <span id="like-count">142K</span>
+              </button>
+              <div class="pill-divider"></div>
+              <button class="action-btn dislike-btn" id="dislike-btn" title="Dislike">
+                <i data-lucide="thumbs-down"></i>
+              </button>
+            </div>
+
+            <!-- Share Button -->
+            <button class="action-btn pill-action-btn" id="share-btn">
+              <i data-lucide="share-2"></i>
+              <span>Share</span>
+            </button>
+
+            <!-- Save / Watch Later Button -->
+            <button class="action-btn pill-action-btn" id="save-btn">
+              <i data-lucide="bookmark"></i>
+              <span id="save-btn-text">Save</span>
+            </button>
+
+            <!-- Offline / Download Button -->
+            <button class="action-btn pill-action-btn" id="download-btn">
+              <i data-lucide="download"></i>
+              <span>Offline</span>
+            </button>
+
+            <!-- Quick Ambient Mood Toggle Pill -->
+            <button class="action-btn pill-action-btn" id="quick-mood-btn">
+              <i data-lucide="sparkles"></i>
+              <span id="current-mood-text">Sakura Glow</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Video Stats & Expandable Description Box -->
+        <div class="description-card" id="desc-card">
+          <div class="desc-header">
+            <span class="stat-item"><i data-lucide="eye" class="stat-icon"></i> 1,842,910 views</span>
+            <span class="stat-dot">•</span>
+            <span class="stat-item"><i data-lucide="calendar" class="stat-icon"></i> Premiered on Jiya TV</span>
+            <span class="stat-dot">•</span>
+            <span class="stat-item highlight"><i data-lucide="flame" class="stat-icon"></i> #1 Trending Premiere</span>
+            <span class="stat-dot">•</span>
+            <span class="stat-item publisher-stat"><i data-lucide="award" class="stat-icon"></i> Published by
+              Pranav</span>
+          </div>
+
+          <div class="desc-content" id="desc-content">
+            <p class="desc-intro">
+              Welcome to <strong>Jiya TV</strong>! Step into an ethereal, romantic cinematic universe where dreams and
+              reality blur under midnight skies.
+              Full HD high-fidelity audio & visuals curated and published by <strong>Pranav</strong>. Put your
+              headphones on, dim the lights with Cinema Mode, and immerse yourself in the magic. 🍿💖
+            </p>
+
+            <div class="desc-expanded-details" id="desc-details">
+              <div class="desc-section">
+                <h4>✨ Movie Chapters</h4>
+                <ul class="chapters-list">
+                  <li class="chapter-item"><span class="timestamp">00:00</span> <span class="chap-title">Opening
+                      Overture & Starlight Prelude</span></li>
+                  <li class="chapter-item"><span class="timestamp">14:32</span> <span class="chap-title">The Secret
+                      Garden at Midnight</span></li>
+                  <li class="chapter-item"><span class="timestamp">38:15</span> <span class="chap-title">Letters Across
+                      Time & Space</span></li>
+                  <li class="chapter-item"><span class="timestamp">1:04:20</span> <span class="chap-title">The Moonlight
+                      Waltz</span></li>
+                  <li class="chapter-item"><span class="timestamp">1:42:10</span> <span class="chap-title">Grand Finale
+                      & Echoes of Tomorrow</span></li>
+                </ul>
+              </div>
+
+              <div class="desc-section">
+                <h4>🌸 Publisher & Production Details</h4>
+                <p class="desc-subtext"><strong>Platform:</strong> Jiya TV ✨</p>
+                <p class="desc-subtext"><strong>Publisher:</strong> Pranav</p>
+                <p class="desc-subtext"><strong>Audio / Master:</strong> Dolby Atmos High Definition Experience</p>
+                <p class="desc-subtext"><strong>Original Soundtrack:</strong> Aura Symphony Orchestra</p>
+              </div>
+
+              <div class="desc-section">
+                <h4>💌 Jiya TV Community</h4>
+                <div class="social-links-row">
+                  <span class="social-tag">Jiya TV • Exclusive Watch</span>
+                  <span class="social-tag">Publisher: @pranav</span>
+                  <span class="social-tag">4K Ultra HD</span>
+                  <span class="social-tag">Girls Cinema Club 💕</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="expand-desc-btn" id="expand-desc-btn">
+            <span id="expand-desc-text">Show more</span>
+            <i data-lucide="chevron-down" id="expand-desc-icon"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Share Modal with Socials & Copy Link -->
+  <div class="modal-overlay" id="share-modal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i data-lucide="share-2" class="modal-icon"></i>
+          <h3>Share on Jiya TV ✨</h3>
+        </div>
+        <button class="modal-close-btn" id="close-share-modal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="share-desc">Share this movie with your besties, friends or movie watch parties:</p>
+        <div class="social-share-grid">
+          <button class="social-btn whatsapp" id="share-whatsapp">
+            <div class="social-icon-box">💬</div>
+            <span>WhatsApp</span>
+          </button>
+          <button class="social-btn instagram" id="share-instagram">
+            <div class="social-icon-box">📷</div>
+            <span>Instagram</span>
+          </button>
+          <button class="social-btn pinterest" id="share-pinterest">
+            <div class="social-icon-box">📌</div>
+            <span>Pinterest</span>
+          </button>
+          <button class="social-btn telegram" id="share-telegram">
+            <div class="social-icon-box">✈️</div>
+            <span>Telegram</span>
+          </button>
+          <button class="social-btn twitter" id="share-twitter">
+            <div class="social-icon-box">𝕏</div>
+            <span>X (Twitter)</span>
+          </button>
+        </div>
+        <div class="copy-link-box">
+          <input type="text" value="https://playdrive.vip/e/AQGrE48AAgDqcw" readonly id="share-link-input">
+          <button class="copy-btn" id="copy-link-btn">
+            <i data-lucide="copy"></i>
+            <span>Copy Link</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sleep Timer Modal -->
+  <div class="modal-overlay" id="sleep-modal" aria-hidden="true">
+    <div class="modal-card sleep-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <i data-lucide="moon" class="modal-icon"></i>
+          <h3>Sleep Timer 🌙</h3>
+        </div>
+        <button class="modal-close-btn" id="close-sleep-modal"><i data-lucide="x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="share-desc">Fall asleep to Jiya TV. Screen gently dims when timer ends:</p>
+        <div class="timer-options-grid">
+          <button class="timer-option-btn" data-minutes="15">15 min</button>
+          <button class="timer-option-btn" data-minutes="30">30 min</button>
+          <button class="timer-option-btn" data-minutes="45">45 min</button>
+          <button class="timer-option-btn" data-minutes="60">1 Hour</button>
+          <button class="timer-option-btn" data-minutes="90">1.5 Hours</button>
+          <button class="timer-option-btn reset-timer" data-minutes="0">Turn Off</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div class="toast-container" id="toast">
+    <span class="toast-sparkle">💖</span>
+    <span class="toast-message" id="toast-msg">Link copied to clipboard!</span>
+  </div>
+
+  <!-- Floating Heart Particles Canvas Container for Like Button -->
+  <div class="heart-particles-container" id="heart-particles-container" aria-hidden="true"></div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
